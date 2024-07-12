@@ -1,6 +1,7 @@
 # DO NOT EDIT -->
 from pathlib    import Path
 from typing     import Tuple
+import math
 
 THIS_FOLDER = Path(__file__).resolve().parent
 TWR_POS = []
@@ -56,5 +57,9 @@ def twr_func(coord, tag : str, LoT : list, fire : bool, current_dir : float, tar
         Indicates if the output target_dir is in radians
     
     '''
-    return (coord.as_polar()[1], True, False)
+    x = LoT[1][1][0]
+    y = LoT[1][1][1]
+    tan = math.tan(x/y)
+    target_dir = tan
+    return (target_dir, True, True)
 #End-def
