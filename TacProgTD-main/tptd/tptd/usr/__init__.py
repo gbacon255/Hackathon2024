@@ -57,9 +57,50 @@ def twr_func(coord, tag : str, LoT : list, fire : bool, current_dir : float, tar
         Indicates if the output target_dir is in radians
     
     '''
-    x = LoT[1][1][0]
-    y = LoT[1][1][1]
-    tan = math.tan(x/y)
-    target_dir = tan
-    return (target_dir, True, True)
+    '''
+        print(LoT[1][1])
+        x = LoT[1][1][0]
+        y = LoT[1][1][1]
+        tan = math.tan(x/y)
+        target_dir = tan
+    '''
+    if(int(tag) == 1):
+        #tower x and y
+        tX = LoT[0][1][0]
+        tY = LoT[0][1][1]
+        #lead target x and y
+        bX = LoT[2][1][0]
+        bY = LoT[2][1][1] 
+        target_dir = Transform(tX, tY, bX, bY, current_dir)
+        return (target_dir, True, True)
+    elif(int(tag) == 2):
+        #tower x and y
+        tX = LoT[1][1][0]
+        tY = LoT[1][1][1]
+        #lead target x and y
+        bX = LoT[2][1][0]
+        bY = LoT[2][1][1]
+        target_dir = Transform(tX, tY, bX, bY, current_dir)
+        return (target_dir, True, True)
+    else:
+        return (target_dir, False, True)
 #End-def
+
+#function to transform target coordinates to our turret coordinate frame
+def Transform(tX, tY, bX, bY, current_dir):
+    turn = False
+    trX = bX - tX 
+    trY = bY - tY
+    if(trX ==0):
+        trX -=100
+    if(trX <= 0 and trX <= .1):
+        turn = True
+    if(trY == 0):
+       trY = .0000001
+    #calculates turn needed to aim at leading target
+    deg = math.atan(trY/trX)
+    if turn:
+        deg = deg-math.pi
+        
+    #return the radian turn angle to be used by the turret
+    return deg
